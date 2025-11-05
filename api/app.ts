@@ -32,14 +32,15 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }))
 app.use('/api/auth', authRoutes)
 
 /**
- * health
+ * health check endpoint
  */
 app.use(
   '/api/health',
   (req: Request, res: Response, next: NextFunction): void => {
     res.status(200).json({
       success: true,
-      message: 'ok',
+      message: 'API server is running',
+      timestamp: new Date().toISOString(),
     })
   },
 )
