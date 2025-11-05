@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mockup version="1.0" skin="sketch" fontFace="Balsamiq Sans" measuredW="600" measuredH="500">
+  <controls>
+    <control ID="0" x="0" y="0" w="600" h="500" measuredW="100" measuredH="70" zOrder="0" typeID="Canvas" background="#000000" backgroundAlpha="0.5"/>
+    
+    <!-- Modal Background -->
+    <control ID="1" x="100" y="50" w="400" h="400" measuredW="400" measuredH="400" zOrder="1" typeID="Canvas" background="#FFFFFF"/>
+    
+    <!-- Modal Header -->
+    <control ID="2" x="120" y="70" w="360" h="40" measuredW="360" measuredH="40" zOrder="2" typeID="Title" text="Export to Excel"/>
+    <control ID="3" x="440" y="70" w="20" h="20" measuredW="20" measuredH="20" zOrder="3" typeID="Button" text="✕"/>
+    
+    <!-- Platform Selection -->
+    <control ID="4" x="120" y="130" w="360" h="30" measuredW="360" measuredH="30" zOrder="4" typeID="Label" text="Select Platforms" fontFace="Balsamiq Sans Bold"/>
+    <control ID="5" x="120" y="170" w="170" h="25" measuredW="170" measuredH="25" zOrder="5" typeID="CheckBox" text="Google Maps" checked="true"/>
+    <control ID="6" x="300" y="170" w="120" h="25" measuredW="120" measuredH="25" zOrder="6" typeID="CheckBox" text="Yelp" checked="true"/>
+    <control ID="7" x="120" y="200" w="170" h="25" measuredW="170" measuredH="25" zOrder="7" typeID="CheckBox" text="TripAdvisor" checked="true"/>
+    <control ID="8" x="300" y="200" w="120" h="25" measuredW="120" measuredH="25" zOrder="8" typeID="CheckBox" text="Facebook"/>
+    <control ID="9" x="120" y="230" w="170" h="25" measuredW="170" measuredH="25" zOrder="9" typeID="CheckBox" text="Trustpilot"/>
+    <control ID="10" x="300" y="230" w="120" h="25" measuredW="120" measuredH="25" zOrder="10" typeID="CheckBox" text="Amazon"/>
+    
+    <!-- Date Range -->
+    <control ID="11" x="120" y="270" w="360" h="30" measuredW="360" measuredH="30" zOrder="11" typeID="Label" text="Date Range" fontFace="Balsamiq Sans Bold"/>
+    <control ID="12" x="120" y="310" w="170" h="30" measuredW="170" measuredH="30" zOrder="12" typeID="TextBox" text="2024-01-01"/>
+    <control ID="13" x="300" y="310" w="170" h="30" measuredW="170" measuredH="30" zOrder="13" typeID="TextBox" text="2024-12-31"/>
+    <control ID="14" x="120" y="345" w="60" h="20" measuredW="60" measuredH="20" zOrder="14" typeID="Label" text="From" textColor="#6B7280"/>
+    <control ID="15" x="300" y="345" w="40" h="20" measuredW="40" measuredH="20" zOrder="15" typeID="Label" text="To" textColor="#6B7280"/>
+    
+    <!-- Column Selection -->
+    <control ID="16" x="120" y="375" w="360" h="30" measuredW="360" measuredH="30" zOrder="16" typeID="Label" text="Columns to Export" fontFace="Balsamiq Sans Bold"/>
+    <control ID="17" x="120" y="410" w="170" h="25" measuredW="170" measuredH="25" zOrder="17" typeID="CheckBox" text="Review Text" checked="true"/>
+    <control ID="18" x="300" y="410" w="120" h="25" measuredW="120" measuredH="25" zOrder="18" typeID="CheckBox" text="Rating" checked="true"/>
+    <control ID="19" x="120" y="440" w="170" h="25" measuredW="170" measuredH="25" zOrder="19" typeID="CheckBox" text="Author Name" checked="true"/>
+    <control ID="20" x="300" y="440" w="120" h="25" measuredW="120" measuredH="25" zOrder="20" typeID="CheckBox" text="Date" checked="true"/>
+    <control ID="21" x="120" y="470" w="170" h="25" measuredW="170" measuredH="25" zOrder="21" typeID="CheckBox" text="Platform" checked="true"/>
+    <control ID="22" x="300" y="470" w="120" h="25" measuredW="120" measuredH="25" zOrder="22" typeID="CheckBox" text="Helpful Count"/>
+    
+    <!-- Action Buttons -->
+    <control ID="23" x="120" y="510" w="80" h="35" measuredW="80" measuredH="35" zOrder="23" typeID="Button" text="Cancel"/>
+    <control ID="24" x="320" y="510" w="160" h="35" measuredW="160" measuredH="35" zOrder="24" typeID="Button" textColor="#FFFFFF" background="#2563EB" text="Export Excel File"/>

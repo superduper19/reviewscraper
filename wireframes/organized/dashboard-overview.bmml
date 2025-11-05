@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mockup version="1.0" skin="sketch" fontFace="Balsamiq Sans" measuredW="1200" measuredH="800">
+  <controls>
+    <control ID="0" x="0" y="0" w="1200" h="800" measuredW="100" measuredH="70" zOrder="0" typeID="Canvas"/>
+    
+    <!-- Header -->
+    <control ID="1" x="20" y="20" w="200" h="40" measuredW="200" measuredH="40" zOrder="1" typeID="Title" text="Review Scraper"/>
+    <control ID="2" x="900" y="25" w="80" h="30" measuredW="80" measuredH="30" zOrder="2" typeID="Button" text="User"/>
+    <control ID="3" x="1000" y="25" w="100" h="30" measuredW="100" measuredH="30" zOrder="3" typeID="Button" text="Settings"/>
+    
+    <!-- Sidebar Navigation -->
+    <control ID="4" x="20" y="80" w="180" h="700" measuredW="180" measuredH="700" zOrder="4" typeID="Canvas" background="#F3F4F6"/>
+    <control ID="5" x="30" y="100" w="160" h="40" measuredW="160" measuredH="40" zOrder="5" typeID="Button" text="▶ Dashboard"/>
+    <control ID="6" x="30" y="150" w="160" h="40" measuredW="160" measuredH="40" zOrder="6" typeID="Button" text="Scrapers"/>
+    <control ID="7" x="30" y="200" w="160" h="40" measuredW="160" measuredH="40" zOrder="7" typeID="Button" text="Reviews"/>
+    <control ID="8" x="30" y="250" w="160" h="40" measuredW="160" measuredH="40" zOrder="8" typeID="Button" text="Analytics"/>
+    <control ID="9" x="30" y="300" w="160" h="40" measuredW="160" measuredH="40" zOrder="9" typeID="Button" text="Settings"/>
+    
+    <!-- Main Content Area -->
+    <control ID="10" x="220" y="80" w="960" h="700" measuredW="960" measuredH="700" zOrder="10" typeID="Canvas" background="#FFFFFF"/>
+    
+    <!-- Page Title -->
+    <control ID="11" x="240" y="100" w="300" h="35" measuredW="300" measuredH="35" zOrder="11" typeID="Title" text="Dashboard Overview"/>
+    
+    <!-- Quick Stats Cards -->
+    <control ID="12" x="240" y="150" w="220" h="120" measuredW="220" measuredH="120" zOrder="12" typeID="Canvas" background="#EFF6FF" border="#2563EB"/>
+    <control ID="13" x="260" y="170" w="180" h="30" measuredW="180" measuredH="30" zOrder="13" typeID="Label" text="Total Reviews" fontSize="16" fontFace="Balsamiq Sans Bold"/>
+    <control ID="14" x="260" y="200" w="180" h="40" measuredW="180" measuredH="40" zOrder="14" typeID="Label" text="2,847" fontSize="24" fontFace="Balsamiq Sans Bold" textColor="#2563EB"/>
+    <control ID="15" x="260" y="230" w="180" h="20" measuredW="180" measuredH="20" typeID="Label" text="+12% from last week" textColor="#10B981"/>
+    
+    <control ID="16" x="480" y="150" w="220" h="120" measuredW="220" measuredH="120" zOrder="16" typeID="Canvas" background="#EFF6FF" border="#2563EB"/>
+    <control ID="17" x="500" y="170" w="180" h="30" measuredW="180" measuredH="30" zOrder="17" typeID="Label" text="Active Scrapers" fontSize="16" fontFace="Balsamiq Sans Bold"/>
+    <control ID="18" x="500" y="200" w="180" h="40" measuredW="180" measuredH="40" zOrder="18" typeID="Label" text="8" fontSize="24" fontFace="Balsamiq Sans Bold" textColor="#2563EB"/>
+    <control ID="19" x="500" y="230" w="180" h="20" measuredW="180" measuredH="20" typeID="Label" text="2 pending setup" textColor="#F59E0B"/>
+    
+    <control ID="20" x="720" y="150" w="220" h="120" measuredW="220" measuredH="120" zOrder="20" typeID="Canvas" background="#EFF6FF" border="#2563EB"/>
+    <control ID="21" x="740" y="170" w="180" h="30" measuredW="180" measuredH="30" zOrder="21" typeID="Label" text="Export Ready" fontSize="16" fontFace="Balsamiq Sans Bold"/>
+    <control ID="22" x="740" y="200" w="180" h="40" measuredW="180" measuredH="40" zOrder="22" typeID="Label" text="3 Files" fontSize="24" fontFace="Balsamiq Sans Bold" textColor="#2563EB"/>
+    <control ID="23" x="740" y="230" w="180" h="20" measuredW="180" measuredH="20" typeID="Label" text="Ready for download" textColor="#6B7280"/>
+    
+    <control ID="24" x="960" y="150" w="220" h="120" measuredW="220" measuredH="120" zOrder="24" typeID="Canvas" background="#EFF6FF" border="#2563EB"/>
+    <control ID="25" x="980" y="170" w="180" h="30" measuredW="180" measuredH="30" zOrder="25" typeID="Label" text="Storage Used" fontSize="16" fontFace="Balsamiq Sans Bold"/>
+    <control ID="26" x="980" y="200" w="180" h="40" measuredW="180" measuredH="40" zOrder="26" typeID="Label" text="4.2 GB" fontSize="24" fontFace="Balsamiq Sans Bold" textColor="#2563EB"/>
+    <control ID="27" x="980" y="230" w="180" h="20" measuredW="180" measuredH="20" typeID="Label" text="67% of 20GB limit" textColor="#10B981"/>
+    
+    <!-- Recent Activity Table -->
+    <control ID="28" x="240" y="300" w="300" h="35" measuredW="300" measuredH="35" zOrder="28" typeID="Title" text="Recent Activity"/>
+    
+    <!-- Table Header -->
+    <control ID="29" x="240" y="350" w="940" h="40" measuredW="940" measuredH="40" zOrder="29" typeID="Canvas" background="#F9FAFB"/>
+    <control ID="30" x="260" y="360" w="150" h="20" measuredW="150" measuredH="20" zOrder="30" typeID="Label" text="Platform" fontFace="Balsamiq Sans Bold"/>
+    <control ID="31" x="420" y="360" w="150" h="20" measuredW="150" measuredH="20" zOrder="31" typeID="Label" text="Status" fontFace="Balsamiq Sans Bold"/>
+    <control ID="32" x="580" y="360" w="150" h="20" measuredW="150" measuredH="20" zOrder="32" typeID="Label" text="Reviews" fontFace="Balsamiq Sans Bold"/>
+    <control ID="33" x="740" y="360" w="150" h="20" measuredW="150" measuredH="20" zOrder="33" typeID="Label" text="Last Updated" fontFace="Balsamiq Sans Bold"/>
+    <control ID="34" x="900" y="360" w="150" h="20" measuredW="150" measuredH="20" zOrder="34" typeID="Label" text="Action" fontFace="Balsamiq Sans Bold"/>
+    
+    <!-- Table Rows -->
+    <control ID="35" x="240" y="390" w="940" h="50" measuredW="940" measuredH="50" zOrder="35" typeID="Canvas"/>
+    <control ID="36" x="260" y="405" w="150" h="20" measuredW="150" measuredH="20" zOrder="36" typeID="Label" text="Google Maps"/>
+    <control ID="37" x="420" y="405" w="80" h="20" measuredW="80" measuredH="20" zOrder="37" typeID="Label" text="Active" textColor="#10B981"/>
+    <control ID="38" x="580" y="405" w="150" h="20" measuredW="150" measuredH="20" zOrder="38" typeID="Label" text="1,247"/>
+    <control ID="39" x="740" y="405" w="150" h="20" measuredW="150" measuredH="20" zOrder="39" typeID="Label" text="2 hours ago"/>
+    <control ID="40" x="900" y="400" w="80" h="30" measuredW="80" measuredH="30" zOrder="40" typeID="Button" text="View"/>
+    
+    <control ID="41" x="240" y="440" w="940" h="50" measuredW="940" measuredH="50" zOrder="41" typeID="Canvas"/>
+    <control ID="42" x="260" y="455" w="150" h="20" measuredW="150" measuredH="20" zOrder="42" typeID="Label" text="Yelp"/>
+    <control ID="43" x="420" y="455" w="80" h="20" measuredW="80" measuredH="20" zOrder="43" typeID="Label" text="Paused" textColor="#F59E0B"/>
+    <control ID="44" x="580" y="455" w="150" h="20" measuredW="150" measuredH="20" zOrder="44" typeID="Label" text="892"/>
+    <control ID="45" x="740" y="455" w="150" h="20" measuredW="150" measuredH="20" zOrder="45" typeID="Label" text="1 day ago"/>
+    <control ID="46" x="900" y="450" w="80" h="30" measuredW="80" measuredH="30" zOrder="46" typeID="Button" text="Resume"/>
+    
+    <control ID="47" x="240" y="490" w="940" h="50" measuredW="940" measuredH="50" zOrder="47" typeID="Canvas"/>
+    <control ID="48" x="260" y="505" w="150" h="20" measuredW="150" measuredH="20" zOrder="48" typeID="Label" text="TripAdvisor"/>
+    <control ID="49" x="420" y="505" w="80" h="20" measuredW="80" measuredH="20" zOrder="49" typeID="Label" text="Ready" textColor="#2563EB"/>
+    <control ID="50" x="580" y="505" w="150" h="20" measuredW="150" measuredH="20" zOrder="50" typeID="Label" text="634"/>
+    <control ID="51" x="740" y="505" w="150" h="20" measuredW="150" measuredH="20" zOrder="51" typeID="Label" text="3 days ago"/>
+    <control ID="52" x="900" y="500" w="80" h="30" measuredW="80" measuredH="30" zOrder="52" typeID="Button" text="Export"/>
+    
+    <!-- Action Buttons -->
+    <control ID="53" x="240" y="570" w="150" h="40" measuredW="150" measuredH="40" zOrder="53" typeID="Button" textColor="#2563EB" background="#EFF6FF" text="Export All Data"/>
+    <control ID="54" x="410" y="570" w="150" h="40" measuredW="150" measuredH="40" zOrder="54" typeID="Button" text="Add New Scraper"/>
+    <control ID="55" x="580" y="570" w="150" h="40" measuredW="150" measuredH="40" zOrder="55" typeID="

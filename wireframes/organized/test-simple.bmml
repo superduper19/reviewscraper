@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mockup version="1.0">
+  <controls>
+    <control controlID="0" controlTypeID="com.balsamiq.mockups::Canvas" x="0" y="0" w="800" h="600" measuredW="100" measuredH="70"/>
+    <control controlID="1" controlTypeID="com.balsamiq.mockups::Title" x="50" y="50" w="200" h="40" measuredW="200" measuredH="40" text="Simple Test"/>
+    <control controlID="2" controlTypeID="com.balsamiq.mockups::Button" x="50" y="100" w="100" h="30" measuredW="100" measuredH="30" text="Click Me"/>
+  </controls>
+</mockup>

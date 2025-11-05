@@ -1,0 +1,51 @@
+/* Import Doodle Style Framework */
+@import './styles/doodle.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Override Tailwind with Doodle Theme */
+:root {
+  font-family: var(--font-handwritten, -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif);
+  line-height: 1.6;
+  font-weight: 400;
+  background-color: var(--doodle-background, #FEFBF3);
+  color: var(--doodle-text, #1F2937);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Apply doodle body styles */
+body {
+  font-family: var(--font-handwritten);
+  background-color: var(--doodle-background);
+  color: var(--doodle-text);
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+}
+
+/* Custom scrollbar with doodle style */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--doodle-background);
+  border: 1px solid var(--doodle-text);
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--doodle-primary);
+  border: 2px solid var(--doodle-text);
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--doodle-secondary);
+}

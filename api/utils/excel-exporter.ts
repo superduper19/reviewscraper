@@ -1,0 +1,279 @@
+import ExcelJS from 'exceljs';
+import { ReviewModel } from '../models';
+import { authenticate, AuthRequest } from '../middleware/auth';
+import { S3Service } from '../services/s3-service';
+
+export class ExcelExporter {
+  private reviewModel: ReviewModel;
+  private s3Service: S3Service;
+
+  constructor() {
+    this.reviewModel = new ReviewModel();
+    this.s3Service = new S3Service();
+  }
+
+  async exportReviews(userId: number, filters: any = {}): Promise<Buffer> {
+    try {
+      // Get reviews with filters
+      const reviews = await this.reviewModel.searchReviews(userId, filters.search || '', filters);
+
+      // Create workbook and worksheet
+      const workbook = new ExcelJS.Workbook();
+      const worksheet = workbook.addWorksheet('Reviews');
+
+      // Define columns
+      worksheet.columns = [
+        { header: 'Review ID', key: 'id', width: 10 },
+        { header: 'Platform', key: 'platform', width: 15 },
+        { header: 'Author', key: 'authorName', width: 20 },
+        { header: 'Location', key: 'authorLocation', width: 20 },
+        { header: 'Rating', key: 'rating', width: 8 },
+        { header: 'Title', key: 'title', width: 30 },
+        { header: 'Content', key: 'content', width: 50 },
+        { header: 'Review Date', key: 'reviewDate', width: 15 },
+        { header: 'Scraped Date', key: 'scrapedDate', width: 15 },
+        { header: 'Verified Purchase', key: 'verifiedPurchase', width: 15 },
+        { header: 'Helpful Votes', key: 'helpfulVotes', width: 12 },
+        { header: 'Source URL', key: 'sourceUrl', width: 40 },
+        { header: 'Sentiment', key: 'sentiment', width: 12 },
+        { header: 'Keywords', key: 'keywords', width: 30 }
+      ];
+
+      // Style the header row
+      worksheet.getRow(1).font = { bold: true, color: { argb: 'FFFFFF' } };
+      worksheet.getRow(1).fill = {
+        type: 'pattern',
+        pattern: 'solid',
+        fgColor: { argb: '4472C4' }
+      };
+      worksheet.getRow(1).alignment = { vertical: 'middle', horizontal: 'center' };
+
+      // Add data rows
+      reviews.forEach(review => {
+        worksheet.addRow({
+          id: review.id,
+          platform: review.platform,
+          authorName: review.author_name,
+          authorLocation: review.author_location || '',
+          rating: review.rating,
+          title: review.title || '',
+          content: review.content || '',
+          reviewDate: review.review_date,
+          scrapedDate: review.scraped_date,
+          verifiedPurchase: review.verified_purchase ? 'Yes' : 'No',
+          helpfulVotes: review.helpful_votes || 0,
+          sourceUrl: review.source_url,
+          sentiment: review.sentiment || 'Unknown',
+          keywords: review.keywords ? review.keywords.join(', ') : ''
+        });
+      });
+
+      // Add filters
+      worksheet.autoFilter = {
+        from: 'A1',
+        to: `N${reviews.length + 1}`
+      };
+
+      // Add conditional formatting for ratings
+      const ratingColumn = worksheet.getColumn('E');
+      ratingColumn.eachCell((cell, rowNumber) => {
+        if (rowNumber > 1) { // Skip header
+          const rating = cell.value as number;
+          if (rating >= 4) {
+            cell.fill = {
+              type: 'pattern',
+              pattern: 'solid',
+              fgColor: { argb: 'C6EFCE' }
+            };
+            cell.font = { color: { argb: '006100' } };
+          } else if (rating <= 2) {
+            cell.fill = {
+              type: 'pattern',
+              pattern: 'solid',
+              fgColor: { argb: 'FFC7CE' }
+            };
+            cell.font = { color: { argb: '9C0006' } };
+          }
+        }
+      });
+
+      // Add summary statistics
+      const summaryRow = reviews.length + 3;
+      worksheet.mergeCells(`A${summaryRow}:C${summaryRow}`);
+      worksheet.getCell(`A${summaryRow}`).value = 'Summary Statistics';
+      worksheet.getCell(`A${summaryRow}`).font = { bold: true, size: 14 };
+
+      worksheet.addRow({
+        platform: 'Total Reviews:',
+        rating: reviews.length
+      });
+
+      const avgRating = reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length;
+      worksheet.addRow({
+        platform: 'Average Rating:',
+        rating: avgRating.toFixed(2)
+      });
+
+      const positiveReviews = reviews.filter(r => r.rating >= 4).length;
+      const negativeReviews = reviews.filter(r => r.rating <= 2).length;
+      const neutralReviews = reviews.filter(r => r.rating === 3).length;
+
+      worksheet.addRow({
+        platform: 'Positive Reviews (4-5 stars):',
+        rating: positiveReviews
+      });
+
+      worksheet.addRow({
+        platform: 'Negative Reviews (1-2 stars):',
+        rating: negativeReviews
+      });
+
+      worksheet.addRow({
+        platform: 'Neutral Reviews (3 stars):',
+        rating: neutralReviews
+      });
+
+      // Add platform breakdown
+      const platformBreakdown: { [key: string]: number } = {};
+      reviews.forEach(review => {
+        platformBreakdown[review.platform] = (platformBreakdown[review.platform] || 0) + 1;
+      });
+
+      worksheet.addRow([]);
+      worksheet.addRow({
+        platform: 'Platform Breakdown:',
+        rating: 'Count'
+      });
+
+      Object.entries(platformBreakdown).forEach(([platform, count]) => {
+        worksheet.addRow({
+          platform: platform,
+          rating: count
+        });
+      });
+
+      // Generate buffer
+      const buffer = await workbook.xlsx.writeBuffer();
+      return buffer as Buffer;
+    } catch (error) {
+      console.error('Excel export error:', error);
+      throw error;
+    }
+  }
+
+  async exportToCSV(userId: number, filters: any = {}): Promise<string> {
+    try {
+      // Get reviews with filters
+      const reviews = await this.reviewModel.searchReviews(userId, filters.search || '', filters);
+
+      // Define headers
+      const headers = [
+        'Review ID',
+        'Platform',
+        'Author',
+        'Location',
+        'Rating',
+        'Title',
+        'Content',
+        'Review Date',
+        'Scraped Date',
+        'Verified Purchase',
+        'Helpful Votes',
+        'Source URL',
+        'Sentiment',
+        'Keywords'
+      ];
+
+      // Convert to CSV format
+      const csvRows = [headers.join(',')];
+
+      reviews.forEach(review => {
+        const row = [
+          review.id,
+          `"${review.platform}"`,
+          `"${review.author_name}"`,
+          `"${review.author_location || ''}"`,
+          review.rating,
+          `"${(review.title || '').replace(/"/g, '""')}"`,
+          `"${(review.content || '').replace(/"/g, '""').replace(/\n/g, ' ')}"`,
+          review.review_date,
+          review.scraped_date,
+          review.verified_purchase ? 'Yes' : 'No',
+          review.helpful_votes || 0,
+          `"${review.source_url}"`,
+          `"${review.sentiment || 'Unknown'}"`,
+          `"${review.keywords ? review.keywords.join(', ') : ''}"`
+        ];
+        csvRows.push(row.join(','));
+      });
+
+      return csvRows.join('\n');
+    } catch (error) {
+      console.error('CSV export error:', error);
+      throw error;
+    }
+  }
+}
+
+// Export route handler
+export const exportReviewsHandler = async (req: AuthRequest, res: express.Response) => {
+  try {
+    const user = req.user;
+    if (!user) {
+      return res.status(401).json({ error: 'User not authenticated' });
+    }
+
+    const { format = 'excel', filters = {}, storeInCloud = false } = req.body;
+    const exporter = new ExcelExporter();
+
+    if (format === 'excel') {
+      const buffer = await exporter.exportReviews(user.id, filters);
+      
+      if (storeInCloud) {
+        // Upload to S3 and return URL
+        const fileName = `exports/reviews-export-${user.id}-${Date.now()}.xlsx`;
+        const uploadResult = await exporter.s3Service.uploadExcelExport(user.id, buffer, fileName);
+        
+        res.json({
+          success: true,
+          message: 'Export completed successfully',
+          downloadUrl: uploadResult.url,
+          fileName: uploadResult.key,
+          fileSize: buffer.length
+        });
+      } else {
+        // Direct download
+        res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        res.setHeader('Content-Disposition', `attachment; filename=reviews-export-${new Date().toISOString().split('T')[0]}.xlsx`);
+        res.send(buffer);
+      }
+    } else if (format === 'csv') {
+      const csvData = await exporter.exportToCSV(user.id, filters);
+      
+      if (storeInCloud) {
+        // Upload to S3 and return URL
+        const buffer = Buffer.from(csvData, 'utf8');
+        const fileName = `exports/reviews-export-${user.id}-${Date.now()}.csv`;
+        const uploadResult = await exporter.s3Service.uploadFile(buffer, fileName, 'text/csv');
+        
+        res.json({
+          success: true,
+          message: 'Export completed successfully',
+          downloadUrl: uploadResult.url,
+          fileName: uploadResult.key,
+          fileSize: buffer.length
+        });
+      } else {
+        // Direct download
+        res.setHeader('Content-Type', 'text/csv');
+        res.setHeader('Content-Disposition', `attachment; filename=reviews-export-${new Date().toISOString().split('T')[0]}.csv`);
+        res.send(csvData);
+      }
+    } else {
+      res.status(400).json({ error: 'Unsupported export format' });
+    }
+  } catch (error) {
+    console.error('Export reviews error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+}

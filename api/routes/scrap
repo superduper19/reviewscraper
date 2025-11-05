@@ -1,0 +1,312 @@
+import express from 'express';
+import { ScraperModel, Scraper } from '../models';
+import { authenticate, AuthRequest } from '../middleware/auth';
+import { body, validationResult } from 'express-validator';
+
+const router = express.Router();
+const scraperModel = new ScraperModel();
+
+// Get all scrapers for the authenticated user
+router.get('/', authenticate, async (req: AuthRequest, res: express.Response) => {
+  try {
+    const user = req.user;
+    if (!user) {
+      return res.status(401).json({ error: 'User not authenticated' });
+    }
+
+    const scrapers = await scraperModel.findByUserId(user.id);
+    
+    res.json({
+      scrapers: scrapers.map(scraper => ({
+        id: scraper.id,
+        name: scraper.name,
+        platform: scraper.platform,
+        targetUrl: scraper.target_url,
+        configuration: scraper.configuration,
+        status: scraper.status,
+        lastRun: scraper.last_run,
+        nextRun: scraper.next_run,
+        schedule: scraper.schedule,
+        createdAt: scraper.created_at,
+        updatedAt: scraper.updated_at,
+        successRate: scraper.success_rate,
+        totalReviews: scraper.total_reviews
+      }))
+    });
+  } catch (error) {
+    console.error('Get scrapers error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Get a specific scraper by ID
+router.get('/:id', authenticate, async (req: AuthRequest, res: express.Response) => {
+  try {
+    const user = req.user;
+    if (!user) {
+      return res.status(401).json({ error: 'User not authenticated' });
+    }
+
+    const { id } = req.params;
+    const scraper = await scraperModel.findById(parseInt(id));
+    
+    if (!scraper || scraper.user_id !== user.id) {
+      return res.status(404).json({ error: 'Scraper not found' });
+    }
+
+    res.json({
+      scraper: {
+        id: scraper.id,
+        name: scraper.name,
+        platform: scraper.platform,
+        targetUrl: scraper.target_url,
+        configuration: scraper.configuration,
+        status: scraper.status,
+        lastRun: scraper.last_run,
+        nextRun: scraper.next_run,
+        schedule: scraper.schedule,
+        createdAt: scraper.created_at,
+        updatedAt: scraper.updated_at,
+        successRate: scraper.success_rate,
+        totalReviews: scraper.total_reviews
+      }
+    });
+  } catch (error) {
+    console.error('Get scraper error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Create a new scraper
+router.post('/', authenticate, [
+  body('name').trim().isLength({ min: 1, max: 255 }),
+  body('platform').isIn(['amazon', 'yelp', 'google', 'tripadvisor', 'trustpilot']),
+  body('targetUrl').isURL(),
+  body('configuration').optional().isObject(),
+  body('schedule').optional().isString()
+], async (req: AuthRequest, res: express.Response) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const user = req.user;
+    if (!user) {
+      return res.status(401).json({ error: 'User not authenticated' });
+    }
+
+    const { name, platform, targetUrl, configuration, schedule } = req.body;
+
+    const scraper = await scraperModel.create({
+      user_id: user.id,
+      name,
+      platform,
+      target_url: targetUrl,
+      configuration: configuration || {},
+      status: 'paused',
+      schedule,
+      is_active: true,
+      success_rate: 0,
+      total_reviews: 0
+    });
+
+    res.status(201).json({
+      message: 'Scraper created successfully',
+      scraper: {
+        id: scraper.id,
+        name: scraper.name,
+        platform: scraper.platform,
+        targetUrl: scraper.target_url,
+        configuration: scraper.configuration,
+        status: scraper.status,
+        schedule: scraper.schedule,
+        createdAt: scraper.created_at,
+        successRate: scraper.success_rate,
+        totalReviews: scraper.total_reviews
+      }
+    });
+  } catch (error) {
+    console.error('Create scraper error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Update a scraper
+router.put('/:id', authenticate, [
+  body('name').optional().trim().isLength({ min: 1, max: 255 }),
+  body('platform').optional().isIn(['amazon', 'yelp', 'google', 'tripadvisor', 'trustpilot']),
+  body('targetUrl').optional().isURL(),
+  body('configuration').optional().isObject(),
+  body('status').optional().isIn(['active', 'paused', 'error', 'completed']),
+  body('schedule').optional().isString()
+], async (req: AuthRequest, res: express.Response) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const user = req.user;
+    if (!user) {
+      return res.status(401).json({ error: 'User not authenticated' });
+    }
+
+    const { id } = req.params;
+    const existingScraper = await scraperModel.findById(parseInt(id));
+    
+    if (!existingScraper || existingScraper.user_id !== user.id) {
+      return res.status(404).json({ error: 'Scraper not found' });
+    }
+
+    const updates: any = {};
+    if (req.body.name) updates.name = req.body.name;
+    if (req.body.platform) updates.platform = req.body.platform;
+    if (req.body.targetUrl) updates.target_url = req.body.targetUrl;
+    if (req.body.configuration) updates.configuration = req.body.configuration;
+    if (req.body.status) updates.status = req.body.status;
+    if (req.body.schedule) updates.schedule = req.body.schedule;
+
+    const updatedScraper = await scraperModel.update(parseInt(id), updates);
+    if (!updatedScraper) {
+      return res.status(404).json({ error: 'Scraper not found' });
+    }
+
+    res.json({
+      message: 'Scraper updated successfully',
+      scraper: {
+        id: updatedScraper.id,
+        name: updatedScraper.name,
+        platform: updatedScraper.platform,
+        targetUrl: updatedScraper.target_url,
+        configuration: updatedScraper.configuration,
+        status: updatedScraper.status,
+        lastRun: updatedScraper.last_run,
+        nextRun: updatedScraper.next_run,
+        schedule: updatedScraper.schedule,
+        createdAt: updatedScraper.created_at,
+        updatedAt: updatedScraper.updated_at,
+        successRate: updatedScraper.success_rate,
+        totalReviews: updatedScraper.total_reviews
+      }
+    });
+  } catch (error) {
+    console.error('Update scraper error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Delete a scraper
+router.delete('/:id', authenticate, async (req: AuthRequest, res: express.Response) => {
+  try {
+    const user = req.user;
+    if (!user) {
+      return res.status(401).json({ error: 'User not authenticated' });
+    }
+
+    const { id } = req.params;
+    const existingScraper = await scraperModel.findById(parseInt(id));
+    
+    if (!existingScraper || existingScraper.user_id !== user.id) {
+      return res.status(404).json({ error: 'Scraper not found' });
+    }
+
+    const deleted = await scraperModel.delete(parseInt(id));
+    if (!deleted) {
+      return res.status(404).json({ error: 'Scraper not found' });
+    }
+
+    res.json({ message: 'Scraper deleted successfully' });
+  } catch (error) {
+    console.error('Delete scraper error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Start scraping job
+router.post('/:id/start', authenticate, async (req: AuthRequest, res: express.Response) => {
+  try {
+    const user = req.user;
+    if (!user) {
+      return res.status(401).json({ error: 'User not authenticated' });
+    }
+
+    const { id } = req.params;
+    const existingScraper = await scraperModel.findById(parseInt(id));
+    
+    if (!existingScraper || existingScraper.user_id !== user.id) {
+      return res.status(404).json({ error: 'Scraper not found' });
+    }
+
+    // Update scraper status to active
+    await scraperModel.update(parseInt(id), { 
+      status: 'active',
+      last_run: new Date()
+    });
+
+    // Here you would typically trigger the actual scraping job
+    // For now, we'll just return success
+    res.json({ message: 'Scraping job started successfully' });
+  } catch (error) {
+    console.error('Start scraper error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Stop scraping job
+router.post('/:id/stop', authenticate, async (req: AuthRequest, res: express.Response) => {
+  try {
+    const user = req.user;
+    if (!user) {
+      return res.status(401).json({ error: 'User not authenticated' });
+    }
+
+    const { id } = req.params;
+    const existingScraper = await scraperModel.findById(parseInt(id));
+    
+    if (!existingScraper || existingScraper.user_id !== user.id) {
+      return res.status(404).json({ error: 'Scraper not found' });
+    }
+
+    // Update scraper status to paused
+    await scraperModel.update(parseInt(id), { status: 'paused' });
+
+    res.json({ message: 'Scraping job stopped successfully' });
+  } catch (error) {
+    console.error('Stop scraper error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Get scraper statistics
+router.get('/:id/stats', authenticate, async (req: AuthRequest, res: express.Response) => {
+  try {
+    const user = req.user;
+    if (!user) {
+      return res.status(401).json({ error: 'User not authenticated' });
+    }
+
+    const { id } = req.params;
+    const existingScraper = await scraperModel.findById(parseInt(id));
+    
+    if (!existingScraper || existingScraper.user_id !== user.id) {
+      return res.status(404).json({ error: 'Scraper not found' });
+    }
+
+    // Get basic stats from the scraper
+    const stats = {
+      totalReviews: existingScraper.total_reviews,
+      successRate: existingScraper.success_rate,
+      lastRun: existingScraper.last_run,
+      createdAt: existingScraper.created_at,
+      status: existingScraper.status
+    };
+
+    res.json({ stats });
+  } catch (error) {
+    console.error('Get scraper stats error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+export default router;

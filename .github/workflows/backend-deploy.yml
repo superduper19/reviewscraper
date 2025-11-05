@@ -1,0 +1,96 @@
+name: Backend Deploy
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'api/**'
+      - '.ebextensions/**'
+      - 'package.json'
+      - 'package-lock.json'
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'api/**'
+      - '.ebextensions/**'
+      - 'package.json'
+      - 'package-lock.json'
+
+jobs:
+  deploy-backend:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '22'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Run tests
+      run: npm test
+      continue-on-error: true
+      
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-east-1
+        
+    - name: Install EB CLI
+      run: |
+        pip install awsebcli
+        
+    - name: Setup database password
+      run: |
+        if [ -z "$DB_PASSWORD" ]; then
+          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> $GITHUB_ENV
+        fi
+        
+        # Store password in AWS Secrets Manager
+        aws secretsmanager update-secret \
+          --secret-id review-scraper-db-password \
+          --secret-string "${{ secrets.DB_PASSWORD }}" || \
+        aws secretsmanager create-secret \
+          --name review-scraper-db-password \
+          --description "Database password for Review Scraper" \
+          --secret-string "${{ secrets.DB_PASSWORD }}"
+          
+    - name: Deploy to Elastic Beanstalk
+      if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop'
+      run: |
+        # Initialize EB if not already done
+        if [ ! -d ".elasticbeanstalk" ]; then
+          eb init --platform "Node.js 22" --region us-east-1 --profile default
+        fi
+        
+        # Deploy to appropriate environment
+        if [ "${{ github.ref }}" == "refs/heads/main" ]; then
+          eb deploy review-scraper-prod
+        else
+          eb deploy review-scraper-dev
+        fi
+        
+    - name: Comment deployment status
+      if: always()
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const status = '${{ job.status }}';
+          const environment = '${{ github.ref }}' === 'refs/heads/main' ? 'production' : 'development';
+          const message = status === 'success' 
+            ? `✅ Backend deployed successfully to ${environment}!`
+            : `❌ Backend deployment failed for ${environment}`;
+            
+          if (context.eventName === 'pull_request') {
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo

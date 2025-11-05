@@ -1,0 +1,111 @@
+# GitHub Repository Settings
+# This file configures repository settings for the Review Scraper project
+
+repository:
+  name: reviewscraper
+  description: A comprehensive review scraping application with AWS deployment
+  homepage: https://github.com/superduper19/reviewscraper
+  private: false
+  has_issues: true
+  has_projects: true
+  has_wiki: true
+  has_downloads: true
+  default_branch: main
+  allow_squash_merge: true
+  allow_merge_commit: false
+  allow_rebase_merge: true
+  
+# Branch protection rules
+branches:
+  - name: main
+    protection:
+      required_pull_request_reviews:
+        required_approving_review_count: 1
+        dismiss_stale_reviews: true
+        require_code_owner_reviews: true
+        dismissal_restrictions: {}
+      required_status_checks:
+        strict: true
+        contexts:
+          - "frontend"
+          - "backend" 
+          - "security"
+          - "deploy-prod"
+      enforce_admins: false
+      restrictions: null
+      
+  - name: develop
+    protection:
+      required_pull_request_reviews:
+        required_approving_review_count: 1
+        dismiss_stale_reviews: true
+        require_code_owner_reviews: false
+        dismissal_restrictions: {}
+      required_status_checks:
+        strict: true
+        contexts:
+          - "frontend"
+          - "backend"
+          - "security"
+          - "deploy-dev"
+      enforce_admins: false
+      restrictions: null
+
+# Environment settings
+environments:
+  - name: production
+    deployment_branch_policy:
+      protected_branches: true
+      custom_branch_policies: false
+    reviewers:
+      - superduper19
+    
+  - name: development
+    deployment_branch_policy:
+      protected_branches: false
+      custom_branch_policies: true
+    
+# Required secrets for CI/CD
+required_secrets:
+  - AWS_ACCESS_KEY_ID
+  - AWS_SECRET_ACCESS_KEY
+  - DB_PASSWORD
+  - VITE_API_URL
+  - VITE_SUPABASE_URL
+  - VITE_SUPABASE_ANON_KEY
+  - VITE_JWT_SECRET
+  - VITE_STRIPE_PUBLISHABLE_KEY
+
+# Labels for issues and pull requests
+labels:
+  - name: bug
+    color: d73a4a
+    description: Something isn't working
+  - name: documentation
+    color: 0075ca
+    description: Improvements or additions to documentation
+  - name: duplicate
+    color: cfd3d7
+    description: This issue or pull request already exists
+  - name: enhancement
+    color: a2eeef
+    description: New feature or request
+  - name: good first issue
+    color: 7057ff
+    description: Good for newcomers
+  - name: help wanted
+    color: 008672
+    description: Extra attention is needed
+  - name: invalid
+    color: e4e669
+    description: This doesn't seem right
+  - name: question
+    color: d876e3
+    description: Further information is requested
+  - name: wontfix
+    color: ffffff
+    description: This will not be worked on
+  - name: security
+    color: ee0701
+    description: Security related issue
+  - name:

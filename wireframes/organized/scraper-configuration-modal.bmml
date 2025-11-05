@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mockup version="1.0" skin="sketch" fontFace="Balsamiq Sans" measuredW="700" measuredH="600">
+  <controls>
+    <control ID="0" x="0" y="0" w="700" h="600" measuredW="100" measuredH="70" zOrder="0" typeID="Canvas" background="#000000" backgroundAlpha="0.5"/>
+    
+    <!-- Modal Background -->
+    <control ID="1" x="50" y="50" w="600" h="500" measuredW="600" measuredH="500" zOrder="1" typeID="Canvas" background="#FFFFFF"/>
+    
+    <!-- Modal Header -->
+    <control ID="2" x="70" y="70" w="560" h="40" measuredW="560" measuredH="40" zOrder="2" typeID="Title" text="Configure New Scraper"/>
+    <control ID="3" x="610" y="70" w="20" h="20" measuredW="20" measuredH="20" zOrder="3" typeID="Button" text="✕"/>
+    
+    <!-- Platform Selection -->
+    <control ID="4" x="70" y="130" w="560" h="30" measuredW="560" measuredH="30" zOrder="4" typeID="Label" text="Platform" fontFace="Balsamiq Sans Bold"/>
+    <control ID="5" x="70" y="160" w="560" h="35" measuredW="560" measuredH="35" zOrder="5" typeID="ComboBox" text="Select Platform..."/>
+    
+    <!-- Business Name -->
+    <control ID="6" x="70" y="210" w="560" h="30" measuredW="560" measuredH="30" zOrder="6" typeID="Label" text="Business Name" fontFace="Balsamiq Sans Bold"/>
+    <control ID="7" x="70" y="240" w="560" h="35" measuredW="560" measuredH="35" zOrder="7" typeID="TextBox" text="Enter business name..."/>
+    
+    <!-- URL Input -->
+    <control ID="8" x="70" y="290" w="560" h="30" measuredW="560" measuredH="30" zOrder="8" typeID="Label" text="Review URL" fontFace="Balsamiq Sans Bold"/>
+    <control ID="9" x="70" y="320" w="560" h="35" measuredW="560" measuredH="35" zOrder="9" typeID="TextBox" text="https://maps.google.com/place/reviews/..."/>
+    
+    <!-- Scheduling Options -->
+    <control ID="10" x="70" y="370" w="560" h="30" measuredW="560" measuredH="30" zOrder="10" typeID="Label" text="Scheduling" fontFace="Balsamiq Sans Bold"/>
+    <control ID="11" x="70" y="400" w="170" h="30" measuredW="170" measuredH="30" zOrder="11" typeID="RadioButton" text="Daily" checked="true"/>
+    <control ID="12" x="250" y="400" w="170" h="30" measuredW="170" measuredH="30" zOrder="12" typeID="RadioButton" text="Weekly"/>
+    <control ID="13" x="430" y="400" w="170" h="30" measuredW="170" measuredH="30" zOrder="13" typeID="RadioButton" text="Monthly"/>
+    
+    <!-- Advanced Settings -->
+    <control ID="14" x="70" y="440" w="560" h="30" measuredW="560" measuredH="30" zOrder="14" typeID="Label" text="Advanced Settings" fontFace="Balsamiq Sans Bold"/>
+    <control ID="15" x="70" y="470" w="170" h="25" measuredW="170" measuredH="25" zOrder="15" typeID="CheckBox" text="Auto-export"/>
+    <control ID="16" x="250" y="470" w="170" h="25" measuredW="170" measuredH="25" zOrder="16" typeID="CheckBox" text="Email notifications"/>
+    <control ID="17" x="430" y="470" w="170" h="25" measuredW="170" measuredH="25" zOrder="17" typeID="CheckBox" text="Duplicate detection"/>
+    
+    <!-- Action Buttons -->
+    <control ID="18" x="70" y="520" w="100" h="35" measuredW="100" measuredH="35" zOrder="18" typeID="Button" text="Cancel"/>
+    <control ID="19" x="270" y="520" w="160" h="35" measuredW="160" measuredH="35" zOrder="19" typeID="Button" text="Test Connection"/>
+    <control ID="20" x="450" y="520" w="180" h="35" measuredW="180" measuredH="35" zOrder="20" typeID="Button" textColor="#FFFFFF" background="#2563EB" text="Save Configuration"/>

@@ -1,0 +1,147 @@
+name: Database Migration
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'api/models/**'
+      - 'api/migrations/**'
+      - 'supabase/migrations/**'
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to migrate'
+        required: true
+        default: 'development'
+        type: choice
+        options:
+          - development
+          - production
+
+jobs:
+  migrate-database:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '22'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-east-1
+        
+    - name: Get database password
+      run: |
+        DB_PASSWORD=$(aws secretsmanager get-secret-value \
+          --secret-id review-scraper-db-password \
+          --query SecretString \
+          --output text)
+        echo "DB_PASSWORD=$DB_PASSWORD" >> $GITHUB_ENV
+        
+    - name: Get RDS endpoint
+      run: |
+        ENVIRONMENT="${{ github.event.inputs.environment || 'development' }}"
+        DB_INSTANCE_ID="review-scraper-db-$ENVIRONMENT"
+        
+        RDS_ENDPOINT=$(aws rds describe-db-instances \
+          --db-instance-identifier $DB_INSTANCE_ID \
+          --query 'DBInstances[0].Endpoint.Address' \
+          --output text)
+          
+        echo "DB_HOST=$RDS_ENDPOINT" >> $GITHUB_ENV
+        echo "DB_PORT=5432" >> $GITHUB_ENV
+        echo "DB_NAME=reviewscraper" >> $GITHUB_ENV
+        echo "DB_USER=postgres" >> $GITHUB_ENV
+        
+    - name: Run database migrations
+      run: |
+        # Create migration script
+        cat > migrate.js << 'EOF'
+        const { Sequelize } = require('sequelize');
+        const path = require('path');
+        
+        const sequelize = new Sequelize({
+          dialect: 'postgres',
+          host: process.env.DB_HOST,
+          port: process.env.DB_PORT,
+          database: process.env.DB_NAME,
+          username: process.env.DB_USER,
+          password: process.env.DB_PASSWORD,
+          ssl: true,
+          dialectOptions: {
+            ssl: {
+              require: true,
+              rejectUnauthorized: false
+            }
+          }
+        });
+        
+        async function runMigrations() {
+          try {
+            await sequelize.authenticate();
+            console.log('Database connection established successfully');
+            
+            // Import models
+            const models = require('./api/models');
+            
+            // Sync models
+            await sequelize.sync({ alter: true });
+            console.log('Database synchronized successfully');
+            
+          } catch (error) {
+            console.error('Migration failed:', error);
+            process.exit(1);
+          } finally {
+            await sequelize.close();
+          }
+        }
+        
+        runMigrations();
+        EOF
+        
+        node migrate.js
+        
+    - name: Create migration backup
+      if: github.ref == 'refs/heads/main'
+      run: |
+        # Create backup before production migration
+        TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+        BACKUP_ID="reviewscraper-backup-$TIMESTAMP"
+        
+        aws rds create-db-snapshot \
+          --db-instance-identifier review-scraper-db-production \
+          --db-snapshot-identifier $BACKUP_ID
+          
+        echo "Created backup: $BACKUP_ID"
+        
+    - name: Comment migration status
+      if: always()
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const status = '${{ job.status }}';
+          const environment = '${{ github.event.inputs.environment || 'development' }}';
+          const message = status === 'success' 
+            ? `✅ Database migration completed successfully for ${environment}!`
+            : `❌ Database migration failed for ${environment}`;
+            
+          if (context.eventName === 'pull_request') {
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: message
+            });
+          }

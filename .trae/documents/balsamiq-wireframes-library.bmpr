@@ -1,0 +1,403 @@
+# Balsamiq Wireframes Component Library
+# Review Scraper Interface Design
+# Generated for Balsamiq Mockups 3
+
+## Project Information
+Project: Review Scraper Frontend Interface
+Created: 2024
+Purpose: Multi-platform review scraping dashboard wireframes
+
+## Component Definitions
+
+### Layout Components
+
+[BrowserWindow]
+Type: Browser Window
+Properties:
+  - Title: "Review Scraper Dashboard"
+  - URL: "https://review-scraper.app"
+  - Favicon: Yes
+  - Width: 1200px (Desktop)
+  - Height: 800px
+
+[SidebarNavigation]
+Type: Vertical Navigation
+Properties:
+  - Width: 240px
+  - Background: #F3F4F6
+  - Items: Dashboard, Scrapers, Reviews, Analytics, Settings
+  - Active State: Blue left border
+  - Icons: Font Awesome icons
+
+[HeaderBar]
+Type: Header/Navigation Bar
+Properties:
+  - Height: 64px
+  - Background: #FFFFFF
+  - Shadow: Subtle bottom shadow
+  - Elements: Logo, Search, User Menu
+
+### Data Components
+
+[StatsCard]
+Type: Card Container
+Properties:
+  - Width: 280px
+  - Height: 120px
+  - Padding: 24px
+  - Border: 1px solid #E5E7EB
+  - Border Radius: 8px
+  - Shadow: Subtle
+  - Content: Title, Value, Change indicator
+
+[DataTable]
+Type: Table/Grid
+Properties:
+  - Header: Sortable columns
+  - Rows: 10 per page default
+  - Striped: Yes (alternating colors)
+  - Hover: Yes (row highlighting)
+  - Actions: Edit, Delete, Export per row
+  - Bulk Actions: Checkbox selection
+
+[ReviewCard]
+Type: Content Card
+Properties:
+  - Width: Full width
+  - Height: Auto (min 120px)
+  - Padding: 16px
+  - Border: 1px solid #E5E7EB
+  - Border Radius: 6px
+  - Content: Rating stars, Review text, Author, Date, Platform badge
+
+### Form Components
+
+[PlatformDropdown]
+Type: Dropdown Menu
+Properties:
+  - Width: 200px
+  - Options: Google Maps, Yelp, TripAdvisor, Facebook, Amazon
+  - Icons: Platform logos
+  - Default: "Select Platform"
+
+[DateRangePicker]
+Type: Date Input
+Properties:
+  - Type: Date range selector
+  - Format: MM/DD/YYYY
+  - Presets: Today, Last 7 days, Last 30 days, Last 90 days
+  - Validation: End date after start date
+
+[ExportOptions]
+Type: Checkbox Group
+Properties:
+  - Columns: Review Text, Rating, Author, Date, Platform, Response
+  - Default: All selected
+  - Validation: At least one required
+
+### Modal Components
+
+[ExportModal]
+Type: Modal Dialog
+Properties:
+  - Width: 600px
+  - Height: Auto (max 80% viewport)
+  - Title: "Export to Excel"
+  - Buttons: Cancel, Generate Export
+  - Sections: Platform, Date Range, Columns, Format
+
+[ScraperConfigModal]
+Type: Modal Dialog
+Properties:
+  - Width: 700px
+  - Height: Auto
+  - Title: "Configure Scraper"
+  - Tabs: Basic, Advanced, Schedule
+  - Buttons: Cancel, Save Configuration
+
+[LoadingModal]
+Type: Progress Dialog
+Properties:
+  - Width: 400px
+  - Height: 200px
+  - Content: Progress bar, Status text, Cancel button
+  - Progress: Percentage and estimated time
+
+### Icon Library
+
+#### Navigation Icons
+- Dashboard: `fa-tachometer-alt`
+- Scrapers: `fa-spider`
+- Reviews: `fa-comments`
+- Analytics: `fa-chart-bar`
+- Settings: `fa-cog`
+
+#### Action Icons
+- Add: `fa-plus`
+- Edit: `fa-edit`
+- Delete: `fa-trash`
+- Export: `fa-file-export`
+- Search: `fa-search`
+- Filter: `fa-filter`
+- Play: `fa-play`
+- Pause: `fa-pause`
+- Stop: `fa-stop`
+
+#### Status Icons
+- Active: `fa-check-circle` (Green)
+- Paused: `fa-pause-circle` (Yellow)
+- Error: `fa-exclamation-circle` (Red)
+- Loading: `fa-spinner` (Animated)
+- Success: `fa-check` (Green)
+
+#### Platform Icons
+- Google Maps: Google Maps logo
+- Yelp: Yelp logo
+- TripAdvisor: TripAdvisor logo
+- Facebook: Facebook logo
+- Amazon: Amazon logo
+
+### Color Palette
+
+#### Primary Colors
+- Primary Blue: #2563EB (Main actions)
+- Primary Hover: #1D4ED8
+- Primary Light: #DBEAFE
+
+#### Secondary Colors
+- Success Green: #10B981 (Active, Success)
+- Warning Orange: #F59E0B (Paused, Attention)
+- Error Red: #EF4444 (Errors, Critical)
+- Info Blue: #3B82F6 (Information)
+
+#### Neutral Colors
+- Gray 50: #F9FAFB (Background)
+- Gray 100: #F3F4F6 (Light background)
+- Gray 200: #E5E7EB (Borders)
+- Gray 300: #D1D5DB (Light text)
+- Gray 400: #9CA3AF (Medium text)
+- Gray 500: #6B7280 (Dark text)
+- Gray 600: #4B5563 (Primary text)
+- Gray 900: #111827 (Headings)
+
+### Typography
+
+#### Font Family
+- Primary: Inter, -apple-system, BlinkMacSystemFont, sans-serif
+- Monospace: SF Mono, Monaco, monospace (for code/data)
+
+#### Font Sizes
+- Heading 1: 32px / 40px line-height
+- Heading 2: 24px / 32px line-height
+- Heading 3: 20px / 28px line-height
+- Body Large: 18px / 28px line-height
+- Body: 16px / 24px line-height
+- Small: 14px / 20px line-height
+- Caption: 12px / 16px line-height
+
+#### Font Weights
+- Light: 300
+- Regular: 400
+- Medium: 500
+- Semibold: 600
+- Bold: 700
+
+### Spacing System
+
+#### Base Unit: 4px
+- XS: 4px (1 unit)
+- SM: 8px (2 units)
+- MD: 16px (4 units)
+- LG: 24px (6 units)
+- XL: 32px (8 units)
+- 2XL: 48px (12 units)
+- 3XL: 64px (16 units)
+
+#### Component Spacing
+- Card padding: 24px (LG)
+- Button padding: 12px 24px (MD LG)
+- Table cell padding: 16px (MD)
+- Modal padding: 32px (XL)
+- Form field spacing: 24px (LG)
+
+### Responsive Breakpoints
+
+#### Desktop: 1200px+
+- Full sidebar navigation
+- Multi-column layouts
+- Rich data tables
+- Side-by-side modals
+
+#### Tablet: 768px - 1199px
+- Collapsible sidebar
+- Stacked cards
+- Simplified tables
+- Centered modals
+
+#### Mobile: 320px - 767px
+- Bottom navigation
+- Card-only layouts
+- Full-screen modals
+- Touch-optimized controls
+
+### Animation Guidelines
+
+#### Transition Durations
+- Fast: 150ms (micro-interactions)
+- Normal: 250ms (hover states, expansions)
+- Slow: 350ms (modal openings, page transitions)
+
+#### Easing Functions
+- Standard: cubic-bezier(0.4, 0, 0.2, 1)
+- Deceleration: cubic-bezier(0, 0, 0.2, 1)
+- Acceleration: cubic-bezier(0.4, 0, 1, 1)
+
+### Accessibility Standards
+
+#### Color Contrast
+- Normal text: 4.5:1 minimum ratio
+- Large text: 3:1 minimum ratio
+- Interactive elements: 3:1 minimum ratio
+
+#### Keyboard Navigation
+- Tab order: Logical left-to-right, top-to-bottom
+- Focus indicators: Visible outline (2px, blue)
+- Skip links: Available for main content
+- Escape key: Closes modals and dropdowns
+
+#### Screen Reader Support
+- ARIA labels: All interactive elements
+- Alt text: All images and icons
+- Live regions: Status updates and notifications
+- Semantic HTML: Proper heading hierarchy
+
+## Wireframe Templates
+
+### Template 1: Dashboard Overview
+```
+[BrowserWindow]
+  [HeaderBar]
+    [Logo] "Review Scraper"
+    [SearchBox]
+    [UserMenu]
+  
+  [SidebarNavigation]
+    [MenuItem] "Dashboard" (Active)
+    [MenuItem] "Scrapers"
+    [MenuItem] "Reviews"
+    [MenuItem] "Analytics"
+    [MenuItem] "Settings"
+  
+  [MainContent]
+    [PageHeader] "Dashboard Overview"
+    
+    [StatsCardsRow]
+      [StatsCard] "Total Reviews" "12,847" "+12%"
+      [StatsCard] "Active Scrapers" "3" "-"
+      [StatsCard] "Export Ready" "847" "+5%"
+      [StatsCard] "Storage Used" "2.3GB" "85%"
+    
+    [SectionHeader] "Recent Activity"
+    [DataTable]
+      Headers: Platform, Status, Reviews, Last Updated, Actions
+      Rows: [Platform data]
+    
+    [ButtonPrimary] "Export All Data"
+```
+
+### Template 2: Scraper Management
+```
+[BrowserWindow]
+  [HeaderBar]
+  [SidebarNavigation]
+  
+  [MainContent]
+    [PageHeader] "Scraper Management"
+    
+    [ActionBar]
+      [ButtonPrimary] "+ Add New Scraper"
+      [Dropdown] "Bulk Actions"
+      [SearchBox] "Search scrapers..."
+    
+    [FilterBar]
+      [Dropdown] "All Platforms"
+      [Dropdown] "All Statuses"
+      [DateRangePicker]
+    
+    [DataTable]
+      Headers: [Checkbox], Platform, URL, Status, Reviews, Actions
+      Rows: [Scraper data with status indicators]
+    
+    [Pagination] "1-10 of 47"
+```
+
+### Template 3: Review Data Viewer
+```
+[BrowserWindow]
+  [HeaderBar]
+  [SidebarNavigation]
+  
+  [MainContent]
+    [PageHeader] "Review Data"
+    
+    [FilterBar]
+      [Dropdown] "All Platforms"
+      [DateRangePicker]
+      [SearchBox] "Search reviews..."
+      [ButtonSecondary] "Advanced Filters"
+    
+    [DataTable]
+      Headers: Rating, Review, Author, Date, Platform, Response
+      Rows: [Review data with star ratings]
+    
+    [ActionBar]
+      [ButtonPrimary] "Export Selected"
+      [ButtonSecondary] "Export All"
+      [Dropdown] "Bulk Actions"
+```
+
+### Template 4: Export Modal
+```
+[ModalOverlay]
+  [ModalContainer]
+    [ModalHeader] "Export to Excel"
+    
+    [ModalContent]
+      [Section] "Export Options"
+        [RadioGroup] "All Platforms" / "Selected Platform"
+      
+      [Section] "Date Range"
+        [DateRangePicker]
+      
+      [Section] "Columns"
+        [CheckboxGroup] Review fields
+      
+      [Section] "Format"
+        [RadioGroup] "Excel (.xlsx)" / "CSV (.csv)"
+    
+    [ModalFooter]
+      [ButtonSecondary] "Cancel"
+      [ButtonPrimary] "Generate Export"
+```
+
+## Implementation Instructions
+
+### For Balsamiq Mockups 3
+
+1. **Import this file** as a project template
+2. **Use the component library** defined above
+3. **Follow the spacing system** for consistent layouts
+4. **Apply the color palette** using Balsamiq's color picker
+5. **Use the icon references** for consistent iconography
+6. **Test responsive layouts** using Balsamiq's device frames
+
+### For Development Handoff
+
+1. **Export wireframes** as PNG or PDF
+2. **Include component specifications** from this document
+3. **Provide color codes** and typography details
+4. **Document interaction states** (hover, active, disabled)
+5. **Specify responsive behavior** for each breakpoint
+6. **Include accessibility requirements** and ARIA labels
+
+This Balsamiq library provides
