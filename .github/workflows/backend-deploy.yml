@@ -42,7 +42,7 @@ jobs:
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: us-east-1
+        aws-region: us-east-2
         
     - name: Install EB CLI
       run: |
@@ -68,13 +68,17 @@ jobs:
       run: |
         # Initialize EB if not already done
         if [ ! -d ".elasticbeanstalk" ]; then
-          eb init --platform "Node.js 22" --region us-east-1 --profile default
+          eb init --platform "Node.js 22" --region us-east-2 --profile default
         fi
         
         # Deploy to appropriate environment
         if [ "${{ github.ref }}" == "refs/heads/main" ]; then
+          # Set environment variables for production EB environment
+          eb setenv -e review-scraper-prod AWS_REGION=us-east-2 DB_NAME=review_scraper DB_USER=pgres4548 DB_PORT=${{ secrets.DB_PORT }} DB_INSTANCE_IDENTIFIER=review-scraper-db DATABASE_TYPE=postgresql S3_BUCKET_NAME=review-scraper-bucket JWT_SECRET='${{ secrets.JWT_SECRET }}' DB_PASSWORD='${{ secrets.DB_PASSWORD }}'
           eb deploy review-scraper-prod
         else
+          # Set environment variables for development EB environment
+          eb setenv -e review-scraper-dev AWS_REGION=us-east-2 DB_NAME=review_scraper DB_USER=pgres4548 DB_PORT=${{ secrets.DB_PORT }} DB_INSTANCE_IDENTIFIER=review-scraper-db DATABASE_TYPE=postgresql S3_BUCKET_NAME=review-scraper-bucket JWT_SECRET='${{ secrets.JWT_SECRET }}' DB_PASSWORD='${{ secrets.DB_PASSWORD }}'
           eb deploy review-scraper-dev
         fi
         

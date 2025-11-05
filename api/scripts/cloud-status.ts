@@ -50,7 +50,7 @@ async function showCloudStatus() {
     
     // S3 Bucket
     try {
-      const bucketName = process.env.AWS_S3_BUCKET_NAME || 'review-scraper-dev-bucket';
+      const bucketName = process.env.S3_BUCKET_NAME || 'review-scraper-bucket';
       const files = await listFiles();
       console.log(`🗂️  S3 Bucket "${bucketName}": ${files.length} objects`);
     } catch (error) {

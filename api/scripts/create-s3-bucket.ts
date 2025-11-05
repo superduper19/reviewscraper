@@ -29,7 +29,7 @@ async function createS3Bucket() {
     console.log('✅ Configuration validation passed\n');
     
     // Get bucket name from environment or use default
-    const bucketName = process.env.AWS_S3_BUCKET_NAME || 'review-scraper-dev-bucket';
+    const bucketName = process.env.S3_BUCKET_NAME || 'review-scraper-bucket';
     console.log(`🎯 Target bucket: ${bucketName}`);
     
     // Check if bucket already exists

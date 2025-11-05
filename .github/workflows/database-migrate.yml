@@ -40,7 +40,7 @@ jobs:
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: us-east-1
+        aws-region: us-east-2
         
     - name: Get database password
       run: |
@@ -53,7 +53,7 @@ jobs:
     - name: Get RDS endpoint
       run: |
         ENVIRONMENT="${{ github.event.inputs.environment || 'development' }}"
-        DB_INSTANCE_ID="review-scraper-db-$ENVIRONMENT"
+        DB_INSTANCE_ID="review-scraper-db"
         
         RDS_ENDPOINT=$(aws rds describe-db-instances \
           --db-instance-identifier $DB_INSTANCE_ID \
@@ -61,9 +61,9 @@ jobs:
           --output text)
           
         echo "DB_HOST=$RDS_ENDPOINT" >> $GITHUB_ENV
-        echo "DB_PORT=5432" >> $GITHUB_ENV
-        echo "DB_NAME=reviewscraper" >> $GITHUB_ENV
-        echo "DB_USER=postgres" >> $GITHUB_ENV
+        echo "DB_PORT=${{ secrets.DB_PORT }}" >> $GITHUB_ENV
+        echo "DB_NAME=review_scraper" >> $GITHUB_ENV
+        echo "DB_USER=pgres4548" >> $GITHUB_ENV
         
     - name: Run database migrations
       run: |
@@ -121,7 +121,7 @@ jobs:
         BACKUP_ID="reviewscraper-backup-$TIMESTAMP"
         
         aws rds create-db-snapshot \
-          --db-instance-identifier review-scraper-db-production \
+          --db-instance-identifier review-scraper-db \
           --db-snapshot-identifier $BACKUP_ID
           
         echo "Created backup: $BACKUP_ID"

@@ -46,7 +46,7 @@ async function testAWSConnection() {
     // Step 3: Test S3 connectivity
     console.log('🗂️  Step 3: Testing S3 Connectivity...');
     try {
-      const bucketName = process.env.AWS_S3_BUCKET_NAME || 'review-scraper-dev-bucket';
+      const bucketName = process.env.S3_BUCKET_NAME || 'review-scraper-bucket';
       const bucketAvailable = await bucketExists(bucketName);
       
       if (bucketAvailable) {
@@ -71,7 +71,7 @@ async function testAWSConnection() {
     // Step 4: Test RDS connectivity
     console.log('🗄️  Step 4: Testing RDS Connectivity...');
     try {
-      const dbInstanceId = process.env.AWS_DB_INSTANCE_IDENTIFIER || 'review-scraper-db';
+      const dbInstanceId = process.env.DB_INSTANCE_IDENTIFIER || 'review-scraper-db';
       const dbAvailable = await isDatabaseAvailable(dbInstanceId);
       
       if (dbAvailable) {
